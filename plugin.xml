@@ -3,9 +3,9 @@
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>CordovaAndroidMediaStore</name>
-    <description>Provides a store() function that saves a base64 png bytestring to the gallery as a png file.</description>
+    <description>Provides a store() function that saves a base64 image or video bytestring to the gallery.</description>
     <license>MIT</license>
-    <keywords>cordova,android,mediastore,image</keywords>
+    <keywords>cordova,android,mediastore,image,video</keywords>
     <js-module name="CordovaAndroidMediaStore" src="www/CordovaAndroidMediaStore.js">
         <clobbers target="cordova.plugins.CordovaAndroidMediaStore" />
     </js-module>
