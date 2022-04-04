@@ -65,24 +65,34 @@ public class CordovaAndroidMediaStore extends CordovaPlugin {
 
                 @Override
                 public void run() {
-                    if (type.equals("picture")) {
+                    if (type.equals("picture") || type.equals("photo")) {
                         try {
                             byte[] byteArray = Base64.decode(byteString, Base64.DEFAULT);
                             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
                             Context context = this.cordova.getActivity();
                             ContentResolver contentResolver = context.getContentResolver();
                             if (Build.VERSION.SDK_INT >= 29) {
-                                //todo: do not compress image into PNG -> use original JPEg instead.
                                 final ContentValues contentValues = new ContentValues();
                                 contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, fileName);
-                                contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+
+                                if (type.equals("picture")) {
+                                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/png");
+                                } else {
+                                    contentValues.put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg");
+                                }
+                                
                                 contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, fileDir);
                                 contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
 
                                 Uri imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues);
 
                                 OutputStream out = contentResolver.openOutputStream(imageUri);
-                                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+
+                                if (type.equals("picture")) {
+                                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                                } else {
+                                    bitmap.compress(Bitmap.CompressFormat.JPEG, 95, out);
+                                }
 
                                 contentValues.clear();
                                 contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
